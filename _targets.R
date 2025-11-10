@@ -44,15 +44,14 @@ list(
     name = pp_model_simulation,
     command = prior_simulation(
       data = clean_iso,
-      mu_pimax = 50, # Mean parameter for  max pressure
-      sd_pimax = 10, # SD parameter for max pressure
-      lb_pimax = 40, # Lowest possible point
-      mu_amol = 45,  # Mean parameter for molecular surface area
-      sd_amol = 10,  # SD parameter for molecular surface area
-      lb_amol = 20,  # Lowest possible point  for molecular surface area
-      sigma_delta = 1 # Delta parameter for the error
+      #### Priors ####
+      priors = c(
+        prior(normal(50, 10), nlpar = "pimax", lb = 40), # Prior for max pressure
+        prior(normal(45, 10), nlpar = "Amol", lb = 20),  # Prior for molecular surface area
+        prior(exponential(1), class = "sigma")           # Prior for the error
       )
-    ),
+    )
+  ),
 
   ##### Diagnostics of Prior Predictive simulation ####
   tar_target(
@@ -65,15 +64,14 @@ list(
     name = bayesian_model,
     command = bayesian_modeling(
       data = clean_iso,
-      mu_pimax = 50, # Mean parameter for  max pressure
-      sd_pimax = 10, # SD parameter for max pressure
-      lb_pimax = 40, # Lowest possible point
-      mu_amol = 45,  # Mean parameter for molecular surface area
-      sd_amol = 10,  # SD parameter for molecular surface area
-      lb_amol = 20,  # Lowest possible point  for molecular surface area
-      sigma_delta = 1 # Delta parameter for the error
+      #### Priors ####
+      priors = c(
+        prior(normal(50, 10), nlpar = "pimax", lb = 40), # Prior for max pressure
+        prior(normal(45, 10), nlpar = "Amol", lb = 20),  # Prior for molecular surface area
+        prior(exponential(1), class = "sigma")           # Prior for the error
+        )
       )
-  ),
+    ),
 
   ##### Bayesian model diagnostics ####
   tar_target(
@@ -85,11 +83,5 @@ list(
   tar_target(
     name = bayesian_results,
     command = bayes_insights(bayesian_model)
-  ),
-
-  #### Comparing the Results ####------------------------------
-  tar_target(
-    name = comparison_methods,
-    command = compare_methods(bayesian_results,molecular_surface)
-  )
+    )
 )
