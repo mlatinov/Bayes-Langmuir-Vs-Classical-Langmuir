@@ -44,13 +44,13 @@ list(
     name = pp_model_simulation,
     command = prior_simulation(
       data = clean_iso,
-      mu_pimax = 50,
-      sd_pimax = 10,
-      lb_pimax = 40,
-      mu_amol = 45,
-      sd_amol = 10,
-      lb_amol = 20,
-      sigma_delta = 1
+      mu_pimax = 50, # Mean parameter for  max pressure
+      sd_pimax = 10, # SD parameter for max pressure
+      lb_pimax = 40, # Lowest possible point
+      mu_amol = 45,  # Mean parameter for molecular surface area
+      sd_amol = 10,  # SD parameter for molecular surface area
+      lb_amol = 20,  # Lowest possible point  for molecular surface area
+      sigma_delta = 1 # Delta parameter for the error
       )
     ),
 
@@ -63,7 +63,16 @@ list(
   ##### Bayesian model ####
   tar_target(
     name = bayesian_model,
-    command = bayesian_modeling(clean_iso)
+    command = bayesian_modeling(
+      data = clean_iso,
+      mu_pimax = 50, # Mean parameter for  max pressure
+      sd_pimax = 10, # SD parameter for max pressure
+      lb_pimax = 40, # Lowest possible point
+      mu_amol = 45,  # Mean parameter for molecular surface area
+      sd_amol = 10,  # SD parameter for molecular surface area
+      lb_amol = 20,  # Lowest possible point  for molecular surface area
+      sigma_delta = 1 # Delta parameter for the error
+      )
   ),
 
   ##### Bayesian model diagnostics ####
@@ -75,7 +84,7 @@ list(
   ##### Bayesian Model Insights ####
   tar_target(
     name = bayesian_results,
-    command = bayes_results(bayesian_model)
+    command = bayes_insights(bayesian_model)
   ),
 
   #### Comparing the Results ####------------------------------
