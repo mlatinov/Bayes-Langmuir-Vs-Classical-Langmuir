@@ -1,15 +1,6 @@
 
 #### Prior Predictive simulation function ####
-prior_simulation <- function(
-    data,
-    mu_pimax = 50,
-    sd_pimax = 10,
-    lb_pimax = 40,
-    mu_amol = 45,
-    sd_amol = 15,
-    lb_amol = 20,
-    sigma_delta = 1
-    ){
+prior_simulation <- function(data,priors){
 
   #### Libraries ####
   library(brms)
@@ -21,13 +12,6 @@ prior_simulation <- function(
     Amol ~ 1,  # Constant Molecular surface area
     nl = TRUE, # Non linaer model
     family = gaussian()
-  )
-
-  #### Priors ####
-  priors <- c(
-    prior(normal(mu_pimax, sd_pimax), nlpar = "pimax", lb = lb_pimax), # Prior for max pressure
-    prior(normal(mu_amol, sd_amol), nlpar = "Amol", lb = lb_amol),     # Prior for molecular surface area
-    prior(exponential(sigma_delta), class = "sigma")                   # Prior for the error
   )
 
   #### Prior Predictive Simulation ####
