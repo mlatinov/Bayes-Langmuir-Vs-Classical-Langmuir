@@ -1,21 +1,24 @@
 
 #### Function to clean data_iso ####
-clean_iso_data <- function(data){
+clean_iso_data <- function(datasets){
 
-  # CLean the data and save the results in clean_data_iso
-  clean_data_iso <- data %>%
+  # Loop over every dataset in the list datasets and clean the data
+  datasets_clean <- map(
+    datasets, ~ .x %>%
 
-    # Change the names
-    rename(
-      surface_area_mm2 = Area_mm2,
-      surface_pressure_mN_m = `pi_ mN_m`
-    ) %>%
+      # Standardize the names from the excel random names
+    clean_names() %>%
 
-    # Remove the negative numbers for surface_pressure_mN_m
-    filter(surface_pressure_mN_m > 0)
+      # Give more descriptive names
+    rename_with(~ "surface_area_mm2", matches("area_mm2")) %>%
+    rename_with(~ "surface_pressure_mn_m", matches("p.*m_n_m")) %>%
+
+      # Delete every negative number for the pressure
+    filter(surface_pressure_mn_m > 0)
+  )
 
   # Return the Cleaned data
   return(
-    clean_data_iso
+    datasets_clean
   )
 }
