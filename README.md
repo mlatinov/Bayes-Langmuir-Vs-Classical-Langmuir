@@ -76,6 +76,74 @@ $$\pi_{\max} \sim \text{Normal}(50, 20)$$
 $$A_{\text{mol}} \sim \text{Normal}(10, 5)$$
 $$\sigma \sim \text{Exponential}(1)$$
 
+## Hierarchical Bayesian Langmuir Model
+
+This section extends the classical Bayesian Langmuir model to a **hierarchical framework**, allowing the estimation of molecular surface area (*Aₘₒₗ*) and maximum surface pressure (*πₘₐₓ*) across multiple independent experimental replicates.  
+Such a model captures both **within-experiment variability** (measurement noise) and **between-experiment variability** (differences in system behavior across replicates).
+
+### Model Specification
+
+For each measurement *i* within experiment *j*:
+
+$$
+\pi_{ij} \sim \mathcal{N}(\mu_{ij}, \sigma^2)
+$$
+
+The expected value of surface pressure is modeled through the Langmuir equation:
+
+$$
+\mu_{ij} = \pi_{\max, j} \left( 1 - \frac{A_{\text{mol}, j}}{A_{\text{mol}, j} + A_{ij}} \right)
+$$
+
+where:
+- $\pi_{ij}$ — measured surface pressure (mN/m)  
+- $A_{ij}$ — molecular area (Å²) at measurement *i*  
+- $\pi_{\max, j}$ — maximum achievable surface pressure for experiment *j*  
+- $A_{\text{mol}, j}$ — molecular surface area estimated for experiment *j*  
+- $\sigma$ — measurement error (shared across all experiments)
+
+### Hierarchical Structure
+
+The experiment-level parameters are assumed to arise from population-level (hyper)distributions:
+
+$$
+\pi_{\max, j} \sim \mathcal{N}(\pi_{\max, \text{pop}}, \tau_{\pi})
+$$
+
+$$
+A_{\text{mol}, j} \sim \mathcal{N}(A_{\text{mol}, \text{pop}}, \tau_{A})
+$$
+
+where:
+- $\pi_{\max, \text{pop}}$ and $A_{\text{mol}, \text{pop}}$ are global mean parameters representing the overall system tendency.  
+- $\tau_{\pi}$ and $\tau_{A}$ capture between-experiment variability (population-level standard deviations).
+
+### Prior Distributions
+
+Weakly informative priors are chosen for stability and interpretability:
+
+$$
+\pi_{\max, \text{pop}} \sim \mathcal{N}(50, 20)
+$$
+$$
+A_{\text{mol}, \text{pop}} \sim \mathcal{N}(10, 5)
+$$
+$$
+\tau_{\pi}, \tau_{A} \sim \text{Exponential}(1)
+$$
+$$
+\sigma \sim \text{Exponential}(1)
+$$
+
+### Interpretation
+
+This hierarchical Bayesian formulation enables:
+- Estimation of **individual experiment parameters** while borrowing strength across replicates  
+- **Quantification of uncertainty** at both experiment and population levels  
+- Improved robustness compared to fitting each curve independently  
+
+Such structure is particularly valuable when the experimental conditions are nominally identical but exhibit **biological or instrumental variability**.
+
 ## Installation and Execution
 
 ### Requirements
