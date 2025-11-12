@@ -7,7 +7,7 @@ bayesian_modeling <- function(data,priors){
 
   #### Formula ####
   formula <- brmsformula(
-    surface_pressure_mN_m ~ pimax * (1 - Amol / (Amol + surface_area_mm2)),
+    surface_pressure_mn_m ~ pimax * (1 - Amol / (Amol + surface_area_mm2)),
     pimax ~ 1, # Constant our maximum possible pressure
     Amol ~ 1,  # Constant Molecular surface area
     nl = TRUE, # Non linear model
